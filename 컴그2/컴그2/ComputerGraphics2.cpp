@@ -215,20 +215,29 @@ void Mouse(int button, int state, int x, int y)
 	{
 		change(bGCr, bGCg, bGCb);
 	}
-	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && rect[0].x1 > fx && fx > -1 && fx < 0 && fy > 0 || button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && rect[0].x2 < fx && fx < 0 && fy > 0 || button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && rect[0].y1 < fy && fy > 0 && fx < 0 && fy > 0 || button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && rect[0].y2 > fy && fy < 1 && fx < 0 && fy > 0)
 	{
 		rect[0].x1 -= 0.01;
 		rect[0].y1 += 0.01;
 		rect[0].x2 += 0.01;
 		rect[0].y2 -= 0.01;
+	}
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && rect[1].x1 > fx  && fx > 0 && fy > 0 || button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN &&  rect[1].x2 < fx && fx < 1 && fx > 0 && fy > 0 || button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && rect[1].y1 > fy && fy > 0 && fx > 0 && fy > 0 || button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN &&  rect[1].y2 < fy && fy < 1 && fx > 0 && fy > 0)
+	{
 		rect[1].x1 -= 0.01;
 		rect[1].y1 -= 0.01;
 		rect[1].x2 += 0.01;
 		rect[1].y2 += 0.01;
+	}
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && rect[2].x1 > fx && fx > -1 && fx < 0 && fy < 0 || button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && rect[2].x2 < fx && fx < 0 && fy < 0 || button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && rect[2].y1 > fy && fy > -1 && fx < 0 && fy < 0 || button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && rect[2].y2 < fy && fy < 0 && fx < 0 && fy < 0)
+	{
 		rect[2].x1 -= 0.01;
 		rect[2].y1 -= 0.01;
 		rect[2].x2 += 0.01;
 		rect[2].y2 += 0.01;
+	}
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && rect[3].x1 > fx && fx > 0 && fy < 0 || button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && rect[3].x2 < fx && fx < 1 && fx > 0 && fy < 0 || button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && rect[3].y1 < fy && fy < 0 && fx > 0 && fy < 0 || button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && rect[3].y2 > fy && fy > -1 && fx > 0 && fy < 0)
+	{
 		rect[3].x1 -= 0.01;
 		rect[3].y1 += 0.01;
 		rect[3].x2 += 0.01;
