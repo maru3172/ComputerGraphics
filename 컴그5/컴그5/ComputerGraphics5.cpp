@@ -11,6 +11,8 @@ GLvoid Mouse(int button, int state, int x, int y);
 #define WIDTH 800
 #define HEIGHT 600
 
+float fx = 0.0, fy = 0.0;
+
 void convertXY(int x, int y, float& fx, float& fy)
 {
 	int w = WIDTH;
@@ -71,10 +73,16 @@ struct Rect
 	float y1;
 	float x2;
 	float y2;
+	float rx1;
+	float rx2;
+	float ry1;
+	float ry2;
 	float r;
 	float g;
 	float b;
 	bool state;
+	bool on = false;
+	bool Break;
 };
 Rect rect[20];
 
@@ -85,8 +93,6 @@ float bGCr = 1.0, bGCg = 1.0, bGCb = 1.0;
 
 void main(int argc, char** argv)
 {
-	left_button = false;
-	left_button_move = false;
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
@@ -102,8 +108,8 @@ void main(int argc, char** argv)
 	else
 		std::cout << "GLEW Initialized\n";
 
-	glutKeyboardFunc(Keyboard);
 	glutDisplayFunc(drawScene);
+	glutKeyboardFunc(Keyboard);
 	glutMouseFunc(Mouse);
 	glutMotionFunc(Motion);
 	glutReshapeFunc(Reshape);
@@ -120,6 +126,7 @@ bool Crash(const Rect rec1, const Rect rec2)
 
 GLvoid drawScene()
 {
+	count = 21;
 	glClearColor(bGCr, bGCg, bGCb, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	for (int i = 0; i < 20; i++)
@@ -140,51 +147,63 @@ GLvoid Reshape(int w, int h)
 
 GLvoid Mouse(int button, int state, int x, int y)
 {
-	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	left_button = false;
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 		left_button = true;
+	else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
+	{
+		left_button = false;
+		if (!left_button && count < 20)
+		{
+			rect[count].x1 = fx;
+			rect[count].y1 = fy;
+			rect[count].x2 = rect[count].x1 + 0.15;
+			rect[count].y2 = rect[count].y1 + 0.15;
+			glutPostRedisplay();
+		}
+	}
 }
 
 GLvoid Motion(int x, int y)
 {
 	left_button_move = true;
-	float fx = 0.0, fy = 0.0;
-	if (left_button == true && left_button_move == true)
+	if (left_button && left_button_move)
 	{
 		convertXY(x, y, fx, fy);
 		for (int i = 0; i < 20; i++)
 		{
-			if (rect[i].x1 < fx && rect[i].x2 > fx && rect[i].y1 < fy && rect[i].y2 > fy)
+			if (rect[i].x1 < fx && rect[i].x2 > fx && rect[i].y1 < fy && rect[i].y2 > fy && rect[i].state)
 			{
-				rect[i].x1 = fx - 0.3;
-				rect[i].y1 = fy - 0.3;
-				rect[i].x2 = fx + 0.3;
-				rect[i].y2 = fy + 0.3;
+				rect[i].x1 = fx - 0.15;
+				rect[i].y1 = fy - 0.15;
+				rect[i].x2 = fx + 0.15;
+				rect[i].y2 = fy + 0.15;
 				count = i;
+				bool on = false;
 				for (int j = 0; j < 20; j++)
 				{
-					if (Crash(rect[i], rect[j]))
+					if (i != j && Crash(rect[j], rect[i]) && rect[j].state)
 					{
-						if (j != i)
+						on = true;
+						rect[j].state = false;
+						if (!rect[i].Break)
 						{
-							rect[j].state = false;
 							rect[i].r = rect[j].r;
 							rect[i].g = rect[j].g;
 							rect[i].b = rect[j].b;
-							break;
+							rect[i].Break = true;
 						}
+
 					}
+				}
+				if (!on) {
+					rect[i].Break = false;
 				}
 				break;
 			}
 		}
 	}
-	else
-	{
-		rect[count].x1 += 0.15;
-		rect[count].y1 += 0.15;
-		rect[count].x2 -= 0.15;
-		rect[count].y2 -= 0.15;
-	}
+	left_button_move = false;
 	glutPostRedisplay();
 }
 
