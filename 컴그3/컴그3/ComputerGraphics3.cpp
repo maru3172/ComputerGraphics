@@ -78,6 +78,8 @@ struct Rect
 	float g;
 	float b;
 	bool state;
+	bool Break;
+	int stack = 1;
 };
 
 Rect rect[20];
@@ -122,7 +124,7 @@ GLvoid drawScene()
 	glClear(GL_COLOR_BUFFER_BIT);
 	for (int i = 0; i < 10; i++)
 	{
-		if (rect[i].state == true)
+		if (rect[i].state)
 		{
 			glColor3f(rect[i].r, rect[i].g, rect[i].b);
 			glRectf(rect[i].x1, rect[i].y1, rect[i].x2, rect[i].y2);
@@ -146,21 +148,40 @@ GLvoid Motion(int x, int y)
 		convertXY(x, y, fx, fy);
 		for (int i = 0; i < 10; i++)
 		{
-			if (rect[i].x1 < fx && rect[i].x2 > fx && rect[i].y1 < fy && rect[i].y2 > fy)
+			if (rect[i].x1 < fx && rect[i].x2 > fx && rect[i].y1 < fy && rect[i].y2 > fy && rect[i].state)
 			{
-				rect[i].x1 = fx - 0.125;
-				rect[i].x2 = fx + 0.125;
-				rect[i].y1 = fy - 0.125;
-				rect[i].y2 = fy + 0.125;
+				rect[i].x1 = fx - (0.125 * rect[i].stack);
+				rect[i].x2 = fx + (0.125 * rect[i].stack);
+				rect[i].y1 = fy - (0.125 * rect[i].stack);
+				rect[i].y2 = fy + (0.125 * rect[i].stack);
+				bool on = false;
 				for (int j = 0; j < 10; j++)
 				{
-					if (Crash(rect[i], rect[j]))
+					if (i != j && Crash(rect[j], rect[i]) && rect[j].state)
+
 					{
-						rect[i].x2 = rect[j].x2;
-						rect[i].y2 = rect[j].y2;
-						change(rect[i].r, rect[i].g, rect[i].b);
-						break;
+						on = true;
+						rect[i].x1 = std::min(rect[i].x1, rect[j].x1);
+						rect[i].y1 = std::min(rect[i].y1, rect[j].y1);
+						rect[i].x2 = std::max(rect[i].x2, rect[j].x2);
+						rect[i].y2 = std::max(rect[i].y2, rect[j].y2);
+						rect[i].stack++;
+						rect[j].x1 = 2;
+						rect[j].x2 = 2;
+						rect[j].y1 = 2;
+						rect[j].y2 = 2;
+						count = j;
+						if (!rect[i].Break)
+						{
+							count = j;
+							change(rect[i].r, rect[i].g, rect[i].b);
+							rect[i].Break = true;
+						}
+						
 					}
+				}
+				if (!on) {
+					rect[i].Break = false;
 				}
 				break;
 			}
@@ -188,6 +209,7 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 			{
 				change(rect[i].r, rect[i].g, rect[i].b);
 				rect[i].state = true;
+				rect[i].Break = false;
 			}
 			rect[i].x2 = rect[i].x1 + 0.25;
 			rect[i].y2 = rect[i].y1 + 0.25;
