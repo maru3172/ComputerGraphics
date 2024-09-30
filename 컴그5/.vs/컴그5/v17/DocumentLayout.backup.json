@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\asus\\source\\repos\\\uCEF4\uADF85\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{23C10B8A-1F7E-4BCB-9257-6C06B572941E}|\uCEF4\uADF85\\\uCEF4\uADF85.vcxproj|C:\\Users\\asus\\source\\repos\\\uCEF4\uADF85\\\uCEF4\uADF85\\ComputerGraphics5.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{23C10B8A-1F7E-4BCB-9257-6C06B572941E}|\uCEF4\uADF85\\\uCEF4\uADF85.vcxproj|solutionrelative:\uCEF4\uADF85\\ComputerGraphics5.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ComputerGraphics5.cpp",
+              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\\uCEF4\uADF85\\\uCEF4\uADF85\\ComputerGraphics5.cpp",
+              "RelativeDocumentMoniker": "\uCEF4\uADF85\\ComputerGraphics5.cpp",
+              "ToolTip": "C:\\Users\\asus\\source\\repos\\\uCEF4\uADF85\\\uCEF4\uADF85\\ComputerGraphics5.cpp",
+              "RelativeToolTip": "\uCEF4\uADF85\\ComputerGraphics5.cpp",
+              "ViewState": "AgIAADsAAAAAAAAAAAAAAE0AAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-09-26T12:09:10.229Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -80,6 +80,7 @@ struct Rect
 	float r;
 	float g;
 	float b;
+	int sum = 1;
 	bool state;
 	bool on = false;
 	bool Break;
@@ -155,10 +156,11 @@ GLvoid Mouse(int button, int state, int x, int y)
 		left_button = false;
 		if (!left_button && count < 20)
 		{
-			rect[count].x1 = fx;
-			rect[count].y1 = fy;
-			rect[count].x2 = rect[count].x1 + 0.15;
-			rect[count].y2 = rect[count].y1 + 0.15;
+			rect[count].x1 = 2;
+			rect[count].y1 = 2;
+			rect[count].x2 = 2;
+			rect[count].y2 = 2;
+			rect[count].state = false;
 			glutPostRedisplay();
 		}
 	}
@@ -174,10 +176,10 @@ GLvoid Motion(int x, int y)
 		{
 			if (rect[i].x1 < fx && rect[i].x2 > fx && rect[i].y1 < fy && rect[i].y2 > fy && rect[i].state)
 			{
-				rect[i].x1 = fx - 0.15;
-				rect[i].y1 = fy - 0.15;
-				rect[i].x2 = fx + 0.15;
-				rect[i].y2 = fy + 0.15;
+				rect[i].x1 = fx - (0.075 * rect[i].sum);
+				rect[i].y1 = fy - (0.075 * rect[i].sum);
+				rect[i].x2 = fx + (0.075 * rect[i].sum);
+				rect[i].y2 = fy + (0.075 * rect[i].sum);
 				count = i;
 				bool on = false;
 				for (int j = 0; j < 20; j++)
@@ -185,12 +187,16 @@ GLvoid Motion(int x, int y)
 					if (i != j && Crash(rect[j], rect[i]) && rect[j].state)
 					{
 						on = true;
-						rect[j].state = false;
 						if (!rect[i].Break)
 						{
 							rect[i].r = rect[j].r;
 							rect[i].g = rect[j].g;
 							rect[i].b = rect[j].b;
+							rect[i].sum++;
+							rect[j].x1 = 2;
+							rect[j].x2 = 2;
+							rect[j].y1 = 2;
+							rect[j].y2 = 2;
 							rect[i].Break = true;
 						}
 

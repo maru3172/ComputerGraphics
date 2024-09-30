@@ -1,0 +1,9 @@
+﻿  ComputerGraphics5.cpp
+C:\Users\asus\source\repos\컴그5\컴그5\ComputerGraphics5.cpp(95,6): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
+C:\Users\asus\source\repos\컴그5\컴그5\ComputerGraphics5.cpp(179,21): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\asus\source\repos\컴그5\컴그5\ComputerGraphics5.cpp(180,21): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\asus\source\repos\컴그5\컴그5\ComputerGraphics5.cpp(181,21): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\asus\source\repos\컴그5\컴그5\ComputerGraphics5.cpp(182,21): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\asus\source\repos\컴그5\컴그5\ComputerGraphics5.cpp(236,28): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\asus\source\repos\컴그5\컴그5\ComputerGraphics5.cpp(237,28): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  컴그5.vcxproj -> C:\Users\asus\source\repos\컴그5\x64\Debug\컴그5.exe
