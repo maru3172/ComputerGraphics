@@ -3,6 +3,7 @@
 #include <gl/freeglut.h>
 #include <gl/freeglut_ext.h>
 #include <random>
+#include <math.h>
 GLvoid drawScene(GLvoid);
 GLvoid Reshape(int w, int h);
 GLvoid Keyboard(unsigned char key, int x, int y);
@@ -74,6 +75,10 @@ struct Rect
 	float y1;
 	float x2;
 	float y2;
+	float x11;
+	float y11;
+	float x12;
+	float y12;
 	float r;
 	float g;
 	float b;
@@ -157,7 +162,7 @@ GLvoid Motion(int x, int y)
 				bool on = false;
 				for (int j = 0; j < 10; j++)
 				{
-					if (i != j && Crash(rect[j], rect[i]) && rect[j].state)
+					if (i != j && Crash(rect[j], rect[i]))
 
 					{
 						on = true;
@@ -165,15 +170,9 @@ GLvoid Motion(int x, int y)
 						rect[i].y1 = std::min(rect[i].y1, rect[j].y1);
 						rect[i].x2 = std::max(rect[i].x2, rect[j].x2);
 						rect[i].y2 = std::max(rect[i].y2, rect[j].y2);
-						rect[i].stack++;
-						rect[j].x1 = 2;
-						rect[j].x2 = 2;
-						rect[j].y1 = 2;
-						rect[j].y2 = 2;
-						count = j;
+						rect[j].state = false;
 						if (!rect[i].Break)
 						{
-							count = j;
 							change(rect[i].r, rect[i].g, rect[i].b);
 							rect[i].Break = true;
 						}
@@ -182,6 +181,10 @@ GLvoid Motion(int x, int y)
 				}
 				if (!on) {
 					rect[i].Break = false;
+					for (int j = 0; j < 10; j++)
+					{
+						rect[j].state = true;
+					}
 				}
 				break;
 			}
