@@ -17,7 +17,7 @@ public:
 	glm::vec3 position;
 	glm::vec3 rotation;
 	glm::vec3 scale;
-	Shape() : shapetype{ 2 }, ShapeState{ false }
+	Shape() : shapetype{ 2 }, ShapeState{ false }, position(0.0f), rotation(glm::radians(glm::vec3(10.0f, 10.0f, 0.0f))), scale(1.0f)
 	{
 		setRandomColor();
 	}
@@ -36,14 +36,6 @@ public:
 		setColor(randomColor);
 	}
 
-	glm::vec3 rotateVertex(const glm::vec3& vertex)
-	{
-		glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-		rotationMatrix = glm::rotate(rotationMatrix, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-		rotationMatrix = glm::rotate(rotationMatrix, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-		return glm::vec3(rotationMatrix * glm::vec4(vertex, 1.0f));
-	}
-
 	void setVertex(int shapetype);
 };
 
@@ -57,7 +49,6 @@ void Shape::setVertex(int shapetype)
 		vertices[0] = glm::vec3(0.0f, height / 3.0f, 0.0f);
 		vertices[1] = glm::vec3(-0.5f, -height / 3.0f, 0.0f);
 		vertices[2] = glm::vec3(0.5f, -height / 3.0f, 0.0f);
-		vertices[3] = glm::vec3(0.0f, 0.0f, 0.0f);
 	}
 	else if (shapetype == 2)
 	{
@@ -65,11 +56,6 @@ void Shape::setVertex(int shapetype)
 		vertices[1] = glm::vec3(0.5f, -0.5f, 0.0f);
 		vertices[2] = glm::vec3(0.5f, 0.5f, 0.0f);
 		vertices[3] = glm::vec3(-0.5f, 0.5f, 0.0f);
-	}
-
-	for (int i = 0; i < 4; i++)
-	{
-		vertices[i] = rotateVertex(vertices[i]);
 	}
 }
 
@@ -81,7 +67,7 @@ void main(int argc, char** argv)
 	{
 		for (int i = 0; i < 10; i++)
 		{
-			if (i < 5)
+			if (i > 5)
 			{
 				shape[i].shapetype = 1;
 			}

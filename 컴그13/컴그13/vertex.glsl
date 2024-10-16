@@ -9,6 +9,6 @@ uniform mat4 transform;
 
 void main(void)
 {
-gl_Position = transform *vec4 (in_Position, 1.0f);
-out_Color = in_Color;
+	gl_Position = transform *vec4 (in_Position, 1.0f);
+	out_Color = in_Color;
 }

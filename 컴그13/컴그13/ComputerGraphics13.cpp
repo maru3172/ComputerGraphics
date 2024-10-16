@@ -8,8 +8,8 @@ GLvoid drawScene()
 
 	glBindVertexArray(axesVAO);
 	glm::mat4 axesTransform = glm::mat4(1.0f);
-	GLuint Loc = glGetUniformLocation(shaderProgramID, "transform");
-	glUniformMatrix4fv(Loc, 1, GL_FALSE, glm::value_ptr(axesTransform));
+	GLuint transformLoc = glGetUniformLocation(shaderProgramID, "transform");
+	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(axesTransform));
 	glDrawArrays(GL_LINES, 0, 4);
 
 	glBindVertexArray(vao);
@@ -17,13 +17,25 @@ GLvoid drawScene()
 	{
 		if (shape[i].ShapeState)
 		{
-			if (shape[i].shapetype == 1)
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, shape[i].position);
+			model = glm::rotate(model, shape[i].rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+			model = glm::rotate(model, shape[i].rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+			model = glm::rotate(model, shape[i].rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+			model = glm::scale(model, shape[i].scale);
+
+			glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+			UpdateBuffer();
+
+			// 사각형 그리기
+			if (shape[i].shapetype == 2)
 			{
-				glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(i * 4 * sizeof(GLuint)));
+				glDrawArrays(GL_TRIANGLE_FAN, i * 4, 4);
 			}
-			else if (shape[i].shapetype == 2)
+			else if (shape[i].shapetype == 1)
 			{
-				glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, (void*)(i * 4 * sizeof(GLuint)));
+				glDrawArrays(GL_TRIANGLES, i * 3, 3);
 			}
 		}
 	}
@@ -121,7 +133,11 @@ void InitBuffer()
 		indices[i] = i % 4;
 	}
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
+	drawAxes();
+}
 
+void UpdateBuffer()
+{
 	for (int i = 0; i < 10; i++)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
@@ -130,5 +146,4 @@ void InitBuffer()
 		glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
 		glBufferSubData(GL_ARRAY_BUFFER, i * 4 * 3 * sizeof(GLfloat), 4 * 3 * sizeof(GLfloat), glm::value_ptr(shape[i].colors[0]));
 	}
-	drawAxes();
 }
