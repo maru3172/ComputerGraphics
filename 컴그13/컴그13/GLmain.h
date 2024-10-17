@@ -46,9 +46,10 @@ void Shape::setVertex(int shapetype)
 	if (shapetype == 1)
 	{
 		float height = sqrt(3.0f) / 2.0f;
-		vertices[0] = glm::vec3(0.0f, height / 3.0f, 0.0f);
-		vertices[1] = glm::vec3(-0.5f, -height / 3.0f, 0.0f);
-		vertices[2] = glm::vec3(0.5f, -height / 3.0f, 0.0f);
+		vertices[0] = glm::vec3(0.0f, 1.0f, 0.0f);
+		vertices[1] = glm::vec3(-0.5f, 0.0f, -0.5f);
+		vertices[2] = glm::vec3(0.5f, 0.0f, -0.5f);
+		vertices[3] = glm::vec3(0.0, 0.0f, -0.5f);
 	}
 	else if (shapetype == 2)
 	{
@@ -63,23 +64,62 @@ bool start = false;
 
 void main(int argc, char** argv)
 {
-	if (!start)
-	{
-		for (int i = 0; i < 10; i++)
-		{
-			if (i > 5)
-			{
-				shape[i].shapetype = 1;
+	if (!start) {
+		for (int i = 0; i < 10; i++) {
+			if (i < 6) {
+				shape[i].setVertex(2); // 정육면체
 			}
-			shape[i].setVertex(shape[i].shapetype);
+			else {
+				shape[i].setVertex(1); // 정사면체
+			}
 		}
+		glm::mat4 rot(1.0f);
+		shape[1].vertices[0] = glm::vec3(-0.5, -0.5, -0.5);
+		shape[1].vertices[1] = glm::vec3(0.5, -0.5, -0.5);
+		shape[1].vertices[2] = glm::vec3(0.5, 0.5, -0.5);
+		shape[1].vertices[3] = glm::vec3(-0.5, 0.5, -0.5);
+
+		shape[2].vertices[0] = glm::vec3(-0.5, -0.5, -0.5);
+		shape[2].vertices[1] = glm::vec3(-0.5, 0.5, -0.5);
+		shape[2].vertices[2] = glm::vec3(-0.5, 0.5, 0.5);
+		shape[2].vertices[3] = glm::vec3(-0.5, -0.5, 0.5);
+
+		shape[3].vertices[0] = glm::vec3(0.5, -0.5, -0.5);
+		shape[3].vertices[1] = glm::vec3(0.5, 0.5, -0.5);
+		shape[3].vertices[2] = glm::vec3(0.5, 0.5, 0.5);
+		shape[3].vertices[3] = glm::vec3(0.5, -0.5, 0.5);
+
+		shape[4].vertices[0] = glm::vec3(-0.5, 0.5, -0.5);
+		shape[4].vertices[1] = glm::vec3(0.5, 0.5, -0.5);
+		shape[4].vertices[2] = glm::vec3(0.5, 0.5, 0.5);
+		shape[4].vertices[3] = glm::vec3(-0.5, 0.5, 0.5);
+
+		shape[5].vertices[0] = glm::vec3(-0.5, -0.5, -0.5);
+		shape[5].vertices[1] = glm::vec3(0.5, -0.5, -0.5);
+		shape[5].vertices[2] = glm::vec3(0.5, -0.5, 0.5);
+		shape[5].vertices[3] = glm::vec3(-0.5, -0.5, 0.5);
+
+		shape[7].vertices[0] = glm::vec3(0.0f, 1.0f, 0.0f);
+		shape[7].vertices[1] = glm::vec3(0.5f, 0.0f, -0.5f);
+		shape[7].vertices[2] = glm::vec3(0.0f, 0.0f, 0.5f);
+		shape[7].vertices[3] = glm::vec3(0.0, 0.0f, 0.5f);
+
+		shape[8].vertices[0] = glm::vec3(0.0f, 1.0f, 0.0f);
+		shape[8].vertices[1] = glm::vec3(0.0f, 0.0f, 0.5f);
+		shape[8].vertices[2] = glm::vec3(-0.5f, 0.0f, -0.5f);
+		shape[8].vertices[3] = glm::vec3(0.0, 0.0f, -0.5f);
+
+		shape[9].vertices[0] = glm::vec3(-0.5f, 0.0f, -0.5f);
+		shape[9].vertices[1] = glm::vec3(0.5f, 0.0f, -0.5f);
+		shape[9].vertices[2] = glm::vec3(0.0f, 0.0f, 0.5f);
+		shape[9].vertices[3] = glm::vec3(0.0, 0.0f, 0.5f);
 		start = true;
 	}
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(WIDTH, HEIGHT);
-	glutCreateWindow("Example10");
+	glutCreateWindow("Example13");
 
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
