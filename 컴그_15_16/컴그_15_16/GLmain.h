@@ -9,6 +9,7 @@ std::mt19937 gen(rd());
 std::uniform_int_distribution<int> random1(0, 5);
 std::uniform_int_distribution<int> random2(6, 9);
 std::uniform_real_distribution<float> random(0, 1);
+std::uniform_int_distribution<int> random3(0, 2);
 
 class Shape
 {
@@ -21,11 +22,11 @@ public:
     glm::vec3 position;
     glm::vec3 rotation;
     glm::vec3 scale;
-    bool XPRot, YPRot, XMRot, YMRot;
+    bool XPRot, YPRot, XMRot, YMRot, Swap;
 
-    Shape() : shapetype(2), ShapeState(true), position(0.5f, 0.3f, 0.0f),
+    Shape() : shapetype(2), ShapeState(true), position(0.5f, 0.0f, 0.0f),
         rotation(glm::vec3(30.0f, 30.0f, 0.0f)),
-        scale(0.2f, 0.2f, 0.2f), XPRot(false), YPRot(false), XMRot(false), YMRot(false)
+        scale(0.2f, 0.2f, 0.2f), XPRot(false), YPRot(false), XMRot(false), YMRot(false), Swap(false)
     {
         setRandomColor();
     }
@@ -88,7 +89,6 @@ public:
                 }
             }
         }
-
         fclose(file);
         setRandomColor();
     }
@@ -104,7 +104,7 @@ void main(int argc, char** argv)
 {
     if (!start) {
         shape[0].shapetype = 2;
-        shape[1].shapetype = 0;
+        shape[1].shapetype = 1;
         shape[1].position = glm::vec3(-0.5f, 0.0f, 0.0f);
         for (int i = 0; i < 2; i++)
         {

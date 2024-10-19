@@ -1,6 +1,6 @@
 #include "GLmain.h"
 
-bool XPRot = false, XMRot = false, YPRot = false, YMRot = false, Orbit1 = false, Orbit2 = false, starts = false;
+bool XPRot = false, XMRot = false, YPRot = false, YMRot = false, Orbit1 = false, Orbit2 = false, starts = false, done = false, swap = false;
 float r = 0.0f;
 int theta = 0, theta2 = 0;
 
@@ -40,18 +40,18 @@ GLvoid drawScene()
 
 			UpdateBuffer(shape[i]);
 
-			glDrawElements(GL_TRIANGLES, shape[i].faces.size(), GL_UNSIGNED_INT, shape[i].faces.data());
+			glDrawElements(GL_POLYGON, shape[i].faces.size(), GL_UNSIGNED_INT, shape[i].faces.data());
 		}
 	}
-
 	glutSwapBuffers();
 }
 
 GLvoid Keyboard(unsigned char key, int x, int y)
 {
+	done = false;
 	switch (key)
 	{
-	case 'x': // 여기서부터 15번
+	case 'x':
 		XPRot = true;
 		XMRot = false;
 		break;
@@ -76,8 +76,44 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		Orbit2 = true;
 		break;
 	case 'c':
+		for (int i = 0; i < 2; i++)
+		{
+			shape[i].shapetype = random3(gen);
+			if (shape[i].shapetype == 0)
+			{
+				shape[i].loadFromObjFile("Sphere.obj.txt");
+			}
+			else if (shape[i].shapetype == 1)
+			{
+				shape[i].loadFromObjFile("Cone.obj.txt");
+			}
+			else if (shape[i].shapetype == 2)
+			{
+				shape[i].loadFromObjFile("Cube.obj.txt");
+			}
+		}
 		break;
 	case 's':
+		for (int i = 0; i < 2; i++)
+		{
+			shape[i].position = glm::vec3(0.5f, 0.0f, 0.0f);
+			shape[i].rotation = glm::vec3(30.0f, 30.0f, 0.0f);
+			shape[i].scale = glm::vec3(0.2f, 0.2f, 0.2f);
+			shape[i].XPRot = false;
+			shape[i].XMRot = false;
+			shape[i].YPRot = false;
+			shape[i].YMRot = false;
+		}
+		shape[1].position = glm::vec3(-0.5f, 0.0f, 0.0f);
+		XPRot = false;
+		YPRot = false;
+		XMRot = false;
+		YMRot = false;
+		starts = false;
+		Orbit1 = false;
+		Orbit2 = false;
+		done = true;
+		swap = false;
 		break;
 	case '1':
 		if (XPRot)
@@ -157,6 +193,7 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 	case '4': // 여기서부터 16번
 		break;
 	case '5':
+		swap = true;
 		break;
 	case '6':
 		break;
@@ -170,9 +207,9 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		break;
 	}
 	glutPostRedisplay();
-	if (XPRot || XMRot || YPRot || YMRot || Orbit1 || Orbit2)
+	if (XPRot || XMRot || YPRot || YMRot || Orbit1 || Orbit2 || swap)
 	{
-		if (!starts)
+		if (!starts && !done)
 		{
 			glutTimerFunc(60, TimerFunction, 1);
 			starts = true;
@@ -250,29 +287,69 @@ GLvoid TimerFunction(int value)
 		{
 			shape[i].rotation.y = 0;
 		}
-
-		if (Orbit1)
-		{
-			shape[i].position.x = 0.5f * cos(theta * PI / 180);
-			shape[i].position.y = 0.5f * sin(theta * PI / 180);
-			theta+= 10;
-		}
-		else if (Orbit2)
-		{
-			shape[i].position.x = 0.5f * cos(theta * PI / 180);
-			shape[i].position.y = 0.5f * sin(theta * PI / 180);
-			theta-= 10;
-		}
-		if (theta > 360)
-		{
-			theta = 0;
-		}
-		else if (theta < 0)
-		{
-			theta = 360;
-		}
 	}
 
+	if (Orbit1)
+	{
+		shape[0].position.x = 0.5f * cos(theta * PI / 180);
+		shape[0].position.y = 0.5f * sin(theta * PI / 180);
+		shape[1].position.x = -0.5f * cos(theta * PI / 180);
+		shape[1].position.y = -0.5f * sin(theta * PI / 180);
+		theta += 2;
+	}
+	else if (Orbit2)
+	{
+		shape[0].position.x = 0.5f * cos(theta * PI / 180);
+		shape[0].position.y = 0.5f * sin(theta * PI / 180);
+		shape[1].position.x = -0.5f * cos(theta * PI / 180);
+		shape[1].position.y = -0.5f * sin(theta * PI / 180);
+		theta -= 2;
+	}
+	if (theta > 360)
+	{
+		theta = 0;
+	}
+	else if (theta < 0)
+	{
+		theta = 360;
+	}
+
+	if (swap)
+	{
+		if (!shape[0].Swap)
+		{
+			shape[0].position.x -= 0.01;
+		}
+		else
+		{
+			shape[0].position.x += 0.01;
+		}
+		if (!shape[1].Swap)
+		{
+			shape[1].position.x += 0.01;
+		}
+		else
+		{
+			shape[1].position.x -= 0.01;
+		}
+
+		if (shape[0].position.x < -0.5)
+		{
+			shape[0].Swap = true;
+		}
+		else if (shape[0].position.x > 0.5)
+		{
+			shape[0].Swap = false;
+		}
+		if (shape[1].position.x > 0.5)
+		{
+			shape[1].Swap = true;
+		}
+		else if (shape[1].position.x < -0.5)
+		{
+			shape[1].Swap = false;
+		}
+	}
 	glutPostRedisplay();
 	if (starts)
 	{
