@@ -22,12 +22,14 @@ public:
     glm::vec3 position;
     glm::vec3 rotation;
     glm::vec3 scale;
-    bool XPRot, YPRot, XMRot, YMRot, Swap;
-
-    Shape() : shapetype(2), ShapeState(true), position(0.5f, 0.0f, 0.0f),
-        rotation(glm::vec3(30.0f, 30.0f, 0.0f)),
-        scale(0.2f, 0.2f, 0.2f), XPRot(false), YPRot(false), XMRot(false), YMRot(false), Swap(false)
+    GLfloat radian, thetas;
+    bool XPRot, YPRot, XMRot, YMRot, Swap, Scale, Circle, SwapUnD, UpDown;
+    GLfloat speed;
+    Shape() : shapetype(2), ShapeState(true), position(0.5f, 0.5f, 0.5f),
+        rotation(glm::vec3(30.0f, -30.0f, 0.0f)),
+        scale(0.2f, 0.2f, 0.2f), XPRot(false), YPRot(false), XMRot(false), YMRot(false), Swap(false), Scale(false), Circle(false), radian(0.0), thetas(0.0), SwapUnD(false), UpDown(false)
     {
+        speed = 0.1 + (2 * 0.3);
         setRandomColor();
     }
 
@@ -105,7 +107,8 @@ void main(int argc, char** argv)
     if (!start) {
         shape[0].shapetype = 2;
         shape[1].shapetype = 1;
-        shape[1].position = glm::vec3(-0.5f, 0.0f, 0.0f);
+        shape[1].speed = 0.1 + (3 * 0.3);
+        shape[1].position = glm::vec3(-0.5f, -0.5f, -0.5f);
         for (int i = 0; i < 2; i++)
         {
             if (shape[i].shapetype == 0)
@@ -138,6 +141,7 @@ void main(int argc, char** argv)
     else
         std::cout << "GLEW Initialized\n";
 
+    glEnable(GL_DEPTH_TEST);
     make_shaderProgram();
     InitBuffer();
     glutDisplayFunc(drawScene);

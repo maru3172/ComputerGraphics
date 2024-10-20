@@ -13,7 +13,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <vector>
-GLuint vao, vbo[2], ebo, axesVAO, axesVBO;
+#define M_PI 3.14
+GLuint vao, vbo[2], ebo, axesVAO, axesVBO, spiralVAO, spiralVBO;
 GLvoid drawScene(GLvoid);
 GLvoid TimerFunction(int value);
 GLvoid Keyboard(unsigned char key, int x, int y);
@@ -50,6 +51,50 @@ void drawAxes()
 	glBindVertexArray(axesVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, axesVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(axesVertices), axesVertices, GL_STATIC_DRAW);
+
+	// 위치 속성
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// 색상 속성
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+}
+
+void SpiralAxes()
+{
+	glm::vec3 spiralVertices[1204]; // 600개의 점으로 나선을 표현 (각 점마다 위치와 색상)
+
+	float t = 0.0f;
+	float dt = 2.0f * M_PI / 200.0f; // 3바퀴를 600개의 점으로 나누면 각 바퀴당 200개의 점
+	float radius = 0.0f;
+	float dr = 1.0f / 600.0f; // 반지름 증가율 (600개 점으로 1.0까지 도달)
+
+	for (int i = 0; i < 1204; i += 2) {
+		// 나선의 x와 z 좌표 계산
+		float x = radius * cos(t);
+		float z = radius * sin(t);
+
+		// 위치 설정
+		spiralVertices[i] = glm::vec3(x, 0.0f, z);
+
+		// 색상 설정 (빨간색에서 파란색으로 그라데이션)
+		float red = 1.0f - (float)i / 1204.0f;
+		float blue = (float)i / 1204.0f;
+		spiralVertices[i + 1] = glm::vec3(red, 0.0f, blue);
+
+		// 다음 점을 위한 값 업데이트
+		t += dt;
+		radius += dr;
+	}
+	glGenVertexArrays(1, &spiralVAO);
+	glGenBuffers(1, &spiralVBO);
+	glBindVertexArray(spiralVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, spiralVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(spiralVertices), spiralVertices, GL_STATIC_DRAW);
 
 	// 위치 속성
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
