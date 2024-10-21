@@ -1,6 +1,6 @@
 #include "GLmain.h"
 
-bool XPRot = false, XMRot = false, YPRot = false, YMRot = false, Orbit1 = false, Orbit2 = false, starts = false, done = false, swap = false, Scale = false, SwapCircle = false, done2 = false, mi = false, SwapUnD = false, Spiral = false;
+bool XPRot = false, XMRot = false, YPRot = false, YMRot = false, Orbit1 = false, Orbit2 = false, starts = false, done = false, swap = false, Scale = false, SwapCircle = false, done2 = false, mi = false, SwapUnD = false, Spiral = false, Scale2 = false;
 float r = 0.0f;
 int theta = 0;
 float disThetas = 2.0f * M_PI / 200.0f, disRadian = 1.0f / 600.0f;
@@ -136,6 +136,7 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		SwapCircle = false;
 		mi = false;
 		Spiral = false;
+		Scale2 = false;
 		SwapUnD = false;
 		break;
 	case '1':
@@ -235,6 +236,10 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		Scale = true;
 		break;
 
+	case '9':
+		Scale = true;
+		Scale2 = true;
+		break;
 	case 'q':
 		glutLeaveMainLoop();
 		break;
@@ -324,9 +329,9 @@ GLvoid TimerFunction(int value)
 
 		if (Spiral)
 		{
-			shape[i].position.x = shape[i].radian * cos(-shape[i].thetas);
+			shape[i].position.x = shape[i].radian * cos(shape[i].thetas) - shape[i].radian * sin(shape[i].thetas);
 			shape[i].position.z = 0.0f;
-			shape[i].position.y = shape[i].radian * sin(-shape[i].thetas);
+			shape[i].position.y = shape[i].radian * sin(shape[i].thetas) + shape[i].radian * cos(shape[i].thetas);
 			shape[i].thetas += shape[i].speed * disThetas;
 			shape[i].radian += shape[i].speed * disRadian;
 
@@ -338,12 +343,96 @@ GLvoid TimerFunction(int value)
 		}
 	}
 
+	if (!Scale2)
+	{
+		if (shape[0].shapetype == 0)
+		{
+			shape[0].position.x += 0;
+			shape[0].position.y += 0;
+			shape[0].position.z += 0;
+		}
+		else if (shape[0].shapetype == 1)
+		{
+			shape[0].position.x += 0;
+			shape[0].position.y += -0.429;
+			shape[0].position.z += 0;
+		}
+		else if (shape[0].shapetype == 2)
+		{
+			shape[0].position.x += 0.5;
+			shape[0].position.y += 0.5;
+			shape[0].position.z += 0.5;
+		}
+
+		if (shape[1].shapetype == 0)
+		{
+			shape[1].position.x += 0;
+			shape[1].position.y += 0;
+			shape[1].position.z += 0;
+		}
+		else if (shape[1].shapetype == 1)
+		{
+			shape[1].position.x += 0;
+			shape[1].position.y += -0.429;
+			shape[1].position.z += 0;
+		}
+		else if (shape[1].shapetype == 2)
+		{
+			shape[1].position.x += 0.5;
+			shape[1].position.y += 0.5;
+			shape[1].position.z += 0.5;
+		}
+		Scale2 = true;
+	}
+
+	else if (Scale2)
+	{
+		if (shape[0].shapetype == 0)
+		{
+			shape[0].position.x -= 0;
+			shape[0].position.y -= 0;
+			shape[0].position.z -= 0;
+		}
+		else if (shape[0].shapetype == 1)
+		{
+			shape[0].position.x -= 0;
+			shape[0].position.y -= -0.429;
+			shape[0].position.z -= 0;
+		}
+		else if (shape[0].shapetype == 2)
+		{
+			shape[0].position.x -= 0.5;
+			shape[0].position.y -= 0.5;
+			shape[0].position.z -= 0.5;
+		}
+
+		if (shape[1].shapetype == 0)
+		{
+			shape[1].position.x -= 0;
+			shape[1].position.y -= 0;
+			shape[1].position.z -= 0;
+		}
+		else if (shape[1].shapetype == 1)
+		{
+			shape[1].position.x -= 0;
+			shape[1].position.y -= -0.429;
+			shape[1].position.z -= 0;
+		}
+		else if (shape[1].shapetype == 2)
+		{
+			shape[1].position.x -= 0.5;
+			shape[1].position.y -= 0.5;
+			shape[1].position.z -= 0.5;
+		}
+		Scale2 = false;
+	}
+
 	if (Orbit1)
 	{
-		shape[0].position.x = 0.5f * cos(theta * PI / 180);
-		shape[0].position.y = 0.5f * sin(theta * PI / 180);
-		shape[1].position.x = -0.5f * cos(theta * PI / 180);
-		shape[1].position.y = -0.5f * sin(theta * PI / 180);
+		shape[0].position.x = 0.5 * cos(theta * PI / 180) - 0.5 * sin(theta * PI / 180);
+		shape[0].position.y = 0.5 * sin(theta * PI / 180) + 0.5 * cos(theta * PI / 180);
+		shape[1].position.x = -0.5 * cos(theta * PI / 180) - (-0.5) * sin(theta * PI / 180);
+		shape[1].position.y = -0.5 * sin(theta * PI / 180) + (-0.5) * cos(theta * PI / 180);
 		theta += 2;
 		if (!mi)
 		{
@@ -367,12 +456,11 @@ GLvoid TimerFunction(int value)
 	}
 	else if (Orbit2)
 	{
-		shape[0].position.x = 0.5f * cos(theta * PI / 180);
-		shape[0].position.y = 0.5f * sin(theta * PI / 180);
-		
-		shape[1].position.x = -0.5f * cos(theta * PI / 180);
-		shape[1].position.y = -0.5f * sin(theta * PI / 180);
-		
+		shape[0].position.x = 0.5 * cos(theta * PI / 180) - 0.5 * sin(theta * PI / 180);
+		shape[0].position.y = 0.5 * sin(theta * PI / 180) + 0.5 * cos(theta * PI / 180);
+		shape[1].position.x = -0.5 * cos(theta * PI / 180) - (-0.5) * sin(theta * PI / 180);
+		shape[1].position.y = -0.5 * sin(theta * PI / 180) + (-0.5) * cos(theta * PI / 180);
+
 		theta -= 2;
 		if (!mi)
 		{
@@ -456,7 +544,7 @@ GLvoid TimerFunction(int value)
 		}
 	}
 
-	if (Scale)
+	if (Scale && !Scale2)
 	{
 		if (!shape[0].Scale)
 		{
@@ -507,20 +595,20 @@ GLvoid TimerFunction(int value)
 	{
 		if (!done2)
 		{
-			shape[0].position.x = 0.5 * cos(theta * PI / 180);
-			shape[0].position.y = 0.5 * sin(theta * PI / 180);
+			shape[0].position.x = 0.5 * cos(theta * PI / 180) - 0.5 * sin(theta * PI / 180);
+			shape[0].position.y = 0.5 * sin(theta * PI / 180) + 0.5 * cos(theta * PI / 180);
 			shape[0].position.z -= 0.01;
-			shape[1].position.x = -0.5 * cos(theta * PI / 180);
-			shape[1].position.y = -0.5 * sin(theta * PI / 180);
+			shape[1].position.x = -0.5 * cos(theta * PI / 180) -(-0.5) * sin(theta * PI / 180);
+			shape[1].position.y = -0.5 * sin(theta * PI / 180) +  ( - 0.5)* cos(theta* PI / 180);
 			shape[1].position.z += 0.01;
 		}
 		else
 		{
-			shape[0].position.x = 0.5 * cos(theta * PI / 180);
-			shape[0].position.y = 0.5 * sin(theta * PI / 180);
+			shape[0].position.x = 0.5 * cos(theta * PI / 180) - 0.5 * sin(theta * PI / 180);
+			shape[0].position.y = 0.5 * sin(theta * PI / 180) + 0.5 * cos(theta * PI / 180);
 			shape[0].position.z += 0.01;
-			shape[1].position.x = -0.5 * cos(theta * PI / 180);
-			shape[1].position.y = -0.5 * sin(theta * PI / 180);
+			shape[1].position.x = -0.5 * cos(theta * PI / 180) - (-0.5) * sin(theta * PI / 180);
+			shape[1].position.y = -0.5 * sin(theta * PI / 180) + (-0.5) * cos(theta * PI / 180);
 			shape[1].position.z -= 0.01;
 		}
 		theta += 2;
